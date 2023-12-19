@@ -13,20 +13,23 @@ MongoDbConnect()
 app.get('/getData', async (req, res) => {
     const getJob = await jobModel.find({})
 
- 
-    
-    res.send(getJob)
+    const totalJob = []
+    const count = {};
+
+    getJob.forEach(element => {
+        count[element.location] = (count[element.location] || 0) + 1;
+    });
+
+    totalJob.push(count)
+    res.json({getJob, totalJob})
 
 })
 
 app.get('/', async (req, res) => {
 
-    let getData = await jobModel.find({})
+    let getData = await jobModel.find(req.body)
 
-
-    console.log(count)
-
-
+console.log(getData)
     res.send('success')
 })
 

@@ -21,17 +21,11 @@ import { useLayoutEffect } from 'react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
-// import { Pagination } from "swiper";
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
 
 function Content() {
 
     let [getFeaturedJobData, setGetFeaturedJobData] = useState([])
+    let [countryData, setCountryData] = useState([])
 
     async function getFeaturedJob() {
         const getFeaturedJob = await fetch('http://localhost:4500/getData', {
@@ -43,7 +37,8 @@ function Content() {
         })
 
         const response = await getFeaturedJob.json()
-        setGetFeaturedJobData(response)
+        setGetFeaturedJobData(response.getJob)
+        setCountryData(response.totalJob)
 
     }
 
@@ -58,9 +53,26 @@ function Content() {
         window.wow.init();
     }, []);
 
+    console.log(countryData.map((data,index)=>{
+        return(Object.keys(data).map((data)=>{
+            console.log(data)
+        }))
+        
+    }))
+
+    // obj.map((data)=>{
+    //     console.log(data)
+    // })
+    // Object.values(getFeaturedJobData).map((data) => {
+    //    return(data.map((data)=>{
+    //     console.log(data)
+    //    }))
+    // })
+
+
     return (
         <div className='flex flex-col bg-white gap-8'>
-      
+
             <div>
                 <div className='flex flex-col bg-[#F4EFE7]
             md:flex-row  '>
@@ -302,15 +314,13 @@ function Content() {
                     <div data-wow-duration="1s" data-wow-delay="1s" className='wow fadeInRight flex flex-col gap-5 mt-3
                     md:grid md:grid-cols-2 md:gap-8'>
 
-
-
                         {
                             getFeaturedJobData.map((data) => {
                                 return (
                                     <div className='w-full border border-solid hover:shadow-xl hover:border-[#61CE70] border-gray-300 p-4  flex flex-col gap-4'>
 
                                         <div className='flex gap-4
-                                            md:justify-between'>
+                md:justify-between'>
 
                                             <div className='flex gap-4'>
                                                 <div className='w-14 h-14 object-contain'>
@@ -360,284 +370,7 @@ function Content() {
                                 )
                             })
                         }
-                        {/* {
-                                a[0].map((data) => {
-                                    return (
-                                        <div className='w-full border border-solid hover:shadow-xl hover:border-[#61CE70] border-gray-300 p-4  flex flex-col gap-4'>
 
-                                            <div className='flex gap-4
-                        md:justify-between'>
-
-                                                <div className='flex gap-4'>
-                                                    <div className='w-14 h-14 object-contain'>
-                                                        <img src={SoftwareEngineer}></img>
-                                                    </div>
-
-                                                    <div className='flex flex-col'>
-                                                        <p className='text-teal-500 font-plus-jakarta-sans text-lg font-semibold'>{data[0].jobDomain}</p>
-                                                        <div className='flex gap-2 items-center'>
-                                                            <p className='text-black font-plus-jakarta-sans text-xl font-bold'>{data[0].jobName}</p>
-                                                            <div className='w-4 h-4 rounded-full bg-[#504CFE]'></div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-
-                                                <div className='w-10 h-10 rounded-full object-contain border-2 border-gray-400 flex items-center justify-center'>
-                                                    <img src={Heart}></img>
-                                                </div>
-
-                                            </div>
-                                            <div className='w-full flex items-center flex-wrap -300'>
-                                                <div className='flex items-center'>
-                                                    <img src={locationIcon}></img>
-                                                    <p className='text-gray-600 font-plus-jakarta-sans text-lg font-normal'>{data[0].location}</p>
-                                                </div>
-
-
-
-                                            </div>
-                                            <div>
-                                                <button className='flex items-center justify-start py-2 px-6 rounded-3xl bg-[#F1F1F1]'>
-                                                    Part Time
-                                                </button>
-                                            </div>
-
-                                            <div className='flex items-center justify-between border-t-2 border-gray-200 py-4'>
-                                                <div className='flex gap-3 items-center'>
-                                                    <img src={DollarIcon} className='w-6 h-6'></img>
-                                                    <p className='text-black font-plus-jakarta-sans text-lg font-semibold'>{data[0].salary}<span className='text-[#64666C]'>/ month</span></p>
-                                                </div>
-                                                <p className='text-[#64666C]'>{data.date}</p>
-                                            </div>
-
-                                        </div>
-                                    )
-                                })
-                            } */}
-
-                        {/* {
-                            Object.entries(getFeaturedJobData).map((data) => {
-
-                                        return (
-                                            <div className='w-full border border-solid hover:shadow-xl hover:border-[#61CE70] border-gray-300 p-4  flex flex-col gap-4'>
-
-                                                <div className='flex gap-4
-                                                    md:justify-between'>
-
-                                                    <div className='flex gap-4'>
-                                                        <div className='w-14 h-14 object-contain'>
-                                                            <img src={SoftwareEngineer}></img>
-                                                        </div>
-
-                                                        <div className='flex flex-col'>
-                                                            <p className='text-teal-500 font-plus-jakarta-sans text-lg font-semibold'>{data[0].jobDomain}</p>
-                                                            <div className='flex gap-2 items-center'>
-                                                                <p className='text-black font-plus-jakarta-sans text-xl font-bold'>{data[0].jobName}</p>
-                                                                <div className='w-4 h-4 rounded-full bg-[#504CFE]'></div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div className='w-10 h-10 rounded-full object-contain border-2 border-gray-400 flex items-center justify-center'>
-                                                        <img src={Heart}></img>
-                                                    </div>
-
-                                                </div>
-                                                <div className='w-full flex items-center flex-wrap -300'>
-                                                    <div className='flex items-center'>
-                                                        <img src={locationIcon}></img>
-                                                        <p className='text-gray-600 font-plus-jakarta-sans text-lg font-normal'>{data[0].location}</p>
-                                                    </div>
-
-
-
-                                                </div>
-                                                <div>
-                                                    <button className='flex items-center justify-start py-2 px-6 rounded-3xl bg-[#F1F1F1]'>
-                                                        Part Time
-                                                    </button>
-                                                </div>
-
-                                                <div className='flex items-center justify-between border-t-2 border-gray-200 py-4'>
-                                                    <div className='flex gap-3 items-center'>
-                                                        <img src={DollarIcon} className='w-6 h-6'></img>
-                                                        <p className='text-black font-plus-jakarta-sans text-lg font-semibold'>{data[0].salary}<span className='text-[#64666C]'>/ month</span></p>
-                                                    </div>
-                                                    <p className='text-[#64666C]'>{data.date}</p>
-                                                </div>
-
-                                            </div>
-                                        )
-                            })
-                        } */}
-                        {/* {
-                            featuredJobs.map((data) => {
-                                return (
-                                    <div className='w-full border border-solid hover:shadow-xl hover:border-[#61CE70] border-gray-300 p-4  flex flex-col gap-4'>
-
-                                        <div className='flex gap-4
-                                            md:justify-between'>
-
-                                            <div className='flex gap-4'>
-                                                <div className='w-14 h-14 object-contain'>
-                                                    <img src={SoftwareEngineer}></img>
-                                                </div>
-
-                                                <div className='flex flex-col'>
-                                                    <p className='text-teal-500 font-plus-jakarta-sans text-lg font-semibold'>{data.jobDomain}</p>
-                                                    <div className='flex gap-2 items-center'>
-                                                        <p className='text-black font-plus-jakarta-sans text-xl font-bold'>{data.jobName}</p>
-                                                        <div className='w-4 h-4 rounded-full bg-[#504CFE]'></div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-
-                                            <div className='w-10 h-10 rounded-full object-contain border-2 border-gray-400 flex items-center justify-center'>
-                                                <img src={Heart}></img>
-                                            </div>
-
-                                        </div>
-                                        <div className='w-full flex items-center flex-wrap -300'>
-                                            <div className='flex items-center'>
-                                                <img src={locationIcon}></img>
-                                                <p className='text-gray-600 font-plus-jakarta-sans text-lg font-normal'>{data.location}</p>
-                                            </div>
-
-
-
-                                        </div>
-                                        <div>
-                                            <button className='flex items-center justify-start py-2 px-6 rounded-3xl bg-[#F1F1F1]'>
-                                                Part Time
-                                            </button>
-                                        </div>
-
-                                        <div className='flex items-center justify-between border-t-2 border-gray-200 py-4'>
-                                            <div className='flex gap-3 items-center'>
-                                                <img src={DollarIcon} className='w-6 h-6'></img>
-                                                <p className='text-black font-plus-jakarta-sans text-lg font-semibold'>{data.salary}<span className='text-[#64666C]'>/ month</span></p>
-                                            </div>
-                                            <p className='text-[#64666C]'>{data.date}</p>
-                                        </div>
-
-                                    </div>
-                                )
-                            })
-                        } */}
-
-                        {/* <div className='w-full border border-solid hover:shadow-xl hover:border-[#61CE70] border-gray-300 p-4  flex flex-col gap-4'>
-
-                            <div className='flex gap-4
-                            md:justify-between'>
-
-                                <div className='flex gap-4'>
-                                    <div className='w-14 h-14 object-contain'>
-                                        <img src={SoftwareEngineer}></img>
-                                    </div>
-
-                                    <div className='flex flex-col'>
-                                        <p className='text-teal-500 font-plus-jakarta-sans text-lg font-semibold'>IT & Networking</p>
-                                        <div className='flex gap-2 items-center'>
-                                            <p className='text-black font-plus-jakarta-sans text-xl font-bold'>Software Engineer</p>
-                                            <div className='w-4 h-4 rounded-full bg-[#504CFE]'></div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-                                <div className='w-10 h-10 rounded-full object-contain border-2 border-gray-400 flex items-center justify-center'>
-                                    <img src={Heart}></img>
-                                </div>
-
-                            </div>
-                            <div className='w-full flex items-center flex-wrap -300'>
-                                <div className='flex items-center'>
-                                    <img src={locationIcon}></img>
-                                    <p className='text-gray-600 font-plus-jakarta-sans text-lg font-normal'>52 Irving Pl, NY</p>
-                                </div>
-
-                                <div className='flex items-center'>
-                                    <img src={locationIcon}></img>
-                                    <p className='text-gray-600 font-plus-jakarta-sans text-lg font-normal'>52 Irving Pl, NY</p>
-                                </div>
-
-                            </div>
-                            <div>
-                                <button className='flex items-center justify-start py-2 px-6 rounded-3xl bg-[#F1F1F1]'>
-                                    Part Time
-                                </button>
-                            </div>
-
-                            <div className='flex items-center justify-between border-t-2 border-gray-200 py-4'>
-                                <div className='flex gap-3 items-center'>
-                                    <img src={DollarIcon} className='w-6 h-6'></img>
-                                    <p className='text-black font-plus-jakarta-sans text-lg font-semibold'>$400-450<span className='text-[#64666C]'>/ month</span></p>
-                                </div>
-                                <p className='text-[#64666C]'>June 14, 2030</p>
-                            </div>
-
-                        </div>
-
-                        <div className='w-full border border-solid hover:shadow-xl hover:border-[#61CE70] border-gray-300 p-4  flex flex-col gap-4'>
-
-                            <div className='flex gap-4
-md:justify-between'>
-
-                                <div className='flex gap-4'>
-                                    <div className='w-14 h-14 object-contain'>
-                                        <img src={SoftwareEngineer}></img>
-                                    </div>
-
-                                    <div className='flex flex-col'>
-                                        <p className='text-teal-500 font-plus-jakarta-sans text-lg font-semibold'>IT & Networking</p>
-                                        <div className='flex gap-2 items-center'>
-                                            <p className='text-black font-plus-jakarta-sans text-xl font-bold'>Software Engineer</p>
-                                            <div className='w-4 h-4 rounded-full bg-[#504CFE]'></div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-                                <div className='w-10 h-10 rounded-full object-contain border-2 border-gray-400 flex items-center justify-center'>
-                                    <img src={Heart}></img>
-                                </div>
-
-                            </div>
-                            <div className='w-full flex items-center flex-wrap -300'>
-                                <div className='flex items-center'>
-                                    <img src={locationIcon}></img>
-                                    <p className='text-gray-600 font-plus-jakarta-sans text-lg font-normal'>52 Irving Pl, NY</p>
-                                </div>
-
-                                <div className='flex items-center'>
-                                    <img src={locationIcon}></img>
-                                    <p className='text-gray-600 font-plus-jakarta-sans text-lg font-normal'>52 Irving Pl, NY</p>
-                                </div>
-
-                            </div>
-                            <div>
-                                <button className='flex items-center justify-start py-2 px-6 rounded-3xl bg-[#F1F1F1]'>
-                                    Part Time
-                                </button>
-                            </div>
-
-                            <div className='flex items-center justify-between border-t-2 border-gray-200 py-4'>
-                                <div className='flex gap-3 items-center'>
-                                    <img src={DollarIcon} className='w-6 h-6'></img>
-                                    <p className='text-black font-plus-jakarta-sans text-lg font-semibold'>$400-450<span className='text-[#64666C]'>/ month</span></p>
-                                </div>
-                                <p className='text-[#64666C]'>June 14, 2030</p>
-                            </div>
-
-                        </div> */}
 
                     </div>
                 </div>
@@ -652,16 +385,13 @@ md:justify-between'>
 
                 <div className='flex flex-col 
                 md:flex-row '>
-                    <div className='w-full '>
-                        <div className='w-full overflow-x-auto flex gap-4'>
+                    <div className='static flex gap-5 overflow-x-scroll w-full'>
 
-                            <img src={GermanyPicture} className='w-44 h-[40vh] md:w-72 md:h-[60vh] '></img>
-                            <img src={GermanyPicture} className='w-44 h-[40vh] md:w-72 md:h-[60vh] '></img>
-                            <img src={GermanyPicture} className='w-44 h-[40vh] md:w-72 md:h-[60vh] '></img>
-                            <img src={GermanyPicture} className='w-44 h-[40vh] md:w-72 md:h-[60vh] '></img>
-                            <img src={GermanyPicture} className='w-44 h-[40vh] md:w-72 md:h-[60vh] '></img>
-                            <img src={GermanyPicture} className='w-44 h-[40vh] md:w-72 md:h-[60vh] '></img>
-                        </div>
+                        <img src={GermanyPicture} className='w-44 h-[40vh] md:w-72 md:h-[60vh] '></img>
+                        <img src={GermanyPicture} className='w-44 h-[40vh] md:w-72 md:h-[60vh] '></img>
+                        <img src={GermanyPicture} className='w-44 h-[40vh] md:w-72 md:h-[60vh] '></img>
+                        <img src={GermanyPicture} className='w-44 h-[40vh] md:w-72 md:h-[60vh] '></img>
+                        <img src={GermanyPicture} className='w-44 h-[40vh] md:w-72 md:h-[60vh] '></img>
                     </div>
                 </div>
 
